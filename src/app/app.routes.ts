@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { PublicLayoutComponent } from './layouts/public-layout/public-layout.component';
 import { JugadorLayoutComponent } from './layouts/jugador-layout/jugador-layout.component';
+import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { authRoutes } from './features/auth/auth.routes';
-import { UsuariosComponent } from './features/admin/usuarios/usuarios.component';
 
 export const routes: Routes = [
     {
@@ -24,10 +24,13 @@ export const routes: Routes = [
         ],
     },
     {
-        path: 'admin/usuarios',
-        component: UsuariosComponent,
+        path: 'admin',
+        component: AdminLayoutComponent,
         canActivate: [AuthGuard],
         data: { role: 'admin' },
+        children: [
+            { path: '', loadChildren: () => import('./features/admin/admin.routes').then(r => r.adminRoutes) }
+        ],
     },
     { path: '**', redirectTo: '' }
 ];
