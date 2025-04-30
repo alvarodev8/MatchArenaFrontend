@@ -1,0 +1,17 @@
+services:
+  frontend:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "4200:4200"
+    command: bash -c "npm install && npm install -g @angular/cli && ng serve --host 0.0.0.0 --port 4200"
+    environment:
+      - NODE_ENV=development
+    networks:
+      - matcharena-network
+
+networks:
+  matcharena-network:
+    driver: bridge
