@@ -1,0 +1,25 @@
+<h2>Gestión de Usuarios</h2>
+<div *ngIf="users?.length">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Rol</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users">
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div *ngIf="!users?.length && !error" class="alert alert-info">
+    No hay usuarios registrados.
+</div>
+<div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+</div>
