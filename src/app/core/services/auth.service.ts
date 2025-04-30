@@ -53,6 +53,40 @@ export class AuthService {
     );
   }
 
+  forgotPassword(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/forgot-password`, { email }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'Error al enviar el enlace de recuperación. Inténtalo de nuevo más tarde.';
+        if (error.status === 400) {
+          errorMessage = 'No se pudo enviar el enlace de recuperación. Verifica el email.';
+        } else if (error.status === 422) {
+          const errors = error.error.errors;
+          errorMessage = Object.values(errors).flat().join(' ');
+        } else if (error.status === 500) {
+          errorMessage = 'Error del servidor. Inténtalo de nuevo más tarde.';
+        }
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+  resetPassword(data: { token: string, email: string, password: string, password_confirmation: string }): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/reset-password`, data).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'Error al restablecer la contraseña. Inténtalo de nuevo más tarde.';
+        if (error.status === 400) {
+          errorMessage = 'No se pudo restablecer la contraseña. El enlace puede haber expirado.';
+        } else if (error.status === 422) {
+          const errors = error.error.errors;
+          errorMessage = Object.values(errors).flat().join(' ');
+        } else if (error.status === 500) {
+          errorMessage = 'Error del servidor. Inténtalo de nuevo más tarde.';
+        }
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
   logout(): void {
     this.currentUser = null;
     localStorage.removeItem('user');
