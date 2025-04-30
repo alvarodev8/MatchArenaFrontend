@@ -15,11 +15,12 @@ export class AuthService {
 
   login(credentials: LoginCredentials): Observable<User> {
     return this.http.post<{ user: User, token: string }>(`${this.apiUrl}/login`, credentials).pipe(
-      map(response => response.user),
-      tap(user => {
-        this.currentUser = user;
-        localStorage.setItem('user', JSON.stringify(user));
+      tap(response => {
+        this.currentUser = response.user;
+        localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem('auth_token', response.token);
       }),
+      map(response => response.user),
       catchError((error: HttpErrorResponse) => {
         let errorMessage = 'Error al iniciar sesión. Inténtalo de nuevo más tarde.';
         if (error.status === 401) {
@@ -35,11 +36,12 @@ export class AuthService {
 
   register(data: RegisterData): Observable<User> {
     return this.http.post<{ user: User, token: string }>(`${this.apiUrl}/register`, data).pipe(
-      map(response => response.user),
-      tap(user => {
-        this.currentUser = user;
-        localStorage.setItem('user', JSON.stringify(user));
+      tap(response => {
+        this.currentUser = response.user;
+        localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem('auth_token', response.token);
       }),
+      map(response => response.user),
       catchError((error: HttpErrorResponse) => {
         let errorMessage = 'Error al registrarse. Inténtalo de nuevo más tarde.';
         if (error.status === 422) {
@@ -90,6 +92,10 @@ export class AuthService {
   logout(): void {
     this.currentUser = null;
     localStorage.removeItem('user');
+    localStorage.removeItem('auth_token');
+    this.http.post(`${this.apiUrl}/logout`, {}).subscribe({
+      error: (err) => console.error('Error al cerrar sesión:', err)
+    });
   }
 
   getCurrentUser(): User | null {
@@ -101,6 +107,6 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!this.getCurrentUser();
+    return !!localStorage.getItem('auth_token');
   }
 }
