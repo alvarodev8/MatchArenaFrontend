@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CamposService } from './../../establecimiento/campos/campos.service';
+import { PitchsService } from './../../jugador/campos/campos.service';
 import { Pitch } from '../../../core/models/pitch.model';
 import { CommonModule } from '@angular/common';
 
@@ -14,10 +14,10 @@ export class CamposComponent implements OnInit {
   pitches: Pitch[] = [];
   error: string | null = null;
 
-  constructor(private pitchesService: CamposService) { }
+  constructor(private pitchesService: PitchsService) { }
 
   ngOnInit(): void {
-    this.pitchesService.getCampos().subscribe({
+    this.pitchesService.getPitches().subscribe({
       next: (pitches) => this.pitches = pitches,
       error: (err) => {
         this.error = 'Error al obtener los campos: ' + (err.error?.message || err.message);
