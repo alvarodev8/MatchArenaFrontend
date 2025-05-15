@@ -1,0 +1,10 @@
+<h2>Reservas</h2>
+<ul>
+    <li *ngFor="let reservation of reservations">
+        {{ reservation.start_at | date:'medium' }} - {{ reservation.duration }} min - {{ reservation.pitch.name }} ({{
+        reservation.pitch.location }})
+    </li>
+</ul>
+<div *ngIf="error" class="error">
+    {{ error }}
+</div>
