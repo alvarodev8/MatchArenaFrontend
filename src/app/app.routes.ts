@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { PublicLayoutComponent } from './layouts/public-layout/public-layout.component';
 import { JugadorLayoutComponent } from './layouts/jugador-layout/jugador-layout.component';
+import { EstablecimientoLayoutComponent } from './layouts/establecimiento-layout/establecimiento-layout.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { authRoutes } from './features/auth/auth.routes';
 
@@ -21,6 +22,15 @@ export const routes: Routes = [
         data: { role: 'player' },
         children: [
             { path: '', loadChildren: () => import('./features/jugador/jugador.routes').then(r => r.jugadorRoutes) }
+        ],
+    },
+    {
+        path: 'establecimiento',
+        component: EstablecimientoLayoutComponent,
+        canActivate: [AuthGuard],
+        data: { role: 'establishment' },
+        children: [
+            { path: '', loadChildren: () => import('./features/establecimiento/establecimiento.routes').then(r => r.establecimientoRoutes) }
         ],
     },
     {
