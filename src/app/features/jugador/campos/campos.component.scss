@@ -1,3 +1,63 @@
 .error {
-    color: red;
+  color: red;
+}
+
+.search-bar {
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.pitch-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.pitch-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  width: 300px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.pitch-card h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 15px;
+  text-decoration: none;
+  border-radius: 5px;
+  color: white;
+}
+
+.btn-reserve {
+  background-color: #007bff;
+}
+
+.btn-reserve:hover {
+  background-color: #0056b3;
+}
+
+.no-results {
+  text-align: center;
+  margin-top: 20px;
+  color: #666;
 }
