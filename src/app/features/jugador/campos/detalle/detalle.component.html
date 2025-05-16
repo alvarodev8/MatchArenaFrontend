@@ -1,0 +1,8 @@
+<div *ngIf="pitch" class="pitch-details">
+  <h2>{{ pitch.name }}</h2>
+  <p><strong>Ubicación:</strong> {{ pitch.location }}</p>
+  <p><strong>Establecimiento:</strong> {{ pitch.establishment?.name }}</p>
+  <a [routerLink]="['/jugador/reserva', pitch.id]" class="btn btn-primary">Reservar este campo</a>
+  <a [routerLink]="['/jugador/campos']" class="btn btn-secondary">Volver</a>
+</div>
+<div *ngIf="error" class="error">{{ error }}</div>
