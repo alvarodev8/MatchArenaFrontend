@@ -9,6 +9,7 @@
     <p><strong>Ubicación:</strong> {{ pitch.location }}</p>
     <p><strong>Establecimiento:</strong> {{ pitch?.establishment?.name }}</p>
     <div class="actions">
+      <a [routerLink]="['/jugador/campos', pitch.id, 'detalles']" class="btn btn-details">Ver Detalles</a>
       <a [routerLink]="['/jugador/reserva', pitch.id]" class="btn btn-reserve">Reservar</a>
     </div>
   </div>
