@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { User } from '../../../core/models/user.model';
 
@@ -7,7 +8,7 @@ import { User } from '../../../core/models/user.model';
   providedIn: 'root'
 })
 export class PerfilService {
-  private apiUrl = 'http://localhost:8000/api/profile';
+  private apiUrl = `${environment.apiUrl}/player/profile`;
 
   constructor(private http: HttpClient) { }
 

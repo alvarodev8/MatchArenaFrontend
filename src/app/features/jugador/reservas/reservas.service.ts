@@ -8,7 +8,7 @@ import { Reservation } from '../../../core/models/reservation.model';
   providedIn: 'root'
 })
 export class ReservasService {
-  private apiUrl = `${environment.apiUrl}/reservations`;
+  private apiUrl = `${environment.apiUrl}/player/reservations`;
 
   constructor(private http: HttpClient) { }
 

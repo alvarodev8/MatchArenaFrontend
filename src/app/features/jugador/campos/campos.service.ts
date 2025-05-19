@@ -9,7 +9,7 @@ import { Reservation } from '../../../core/models/reservation.model';
   providedIn: 'root'
 })
 export class PitchsService {
-  private apiUrl = `${environment.apiUrl}/pitches`;
+  private apiUrl = `${environment.apiUrl}/player/pitches`;
 
   constructor(private http: HttpClient) { }
 
