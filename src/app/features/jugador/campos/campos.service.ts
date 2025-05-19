@@ -3,7 +3,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { Pitch } from '../../../core/models/pitch.model';
-import { Reservation } from '../../../core/models/reservation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +14,6 @@ export class PitchsService {
 
   getPitches(): Observable<Pitch[]> {
     return this.http.get<Pitch[]>(this.apiUrl);
-  }
-
-  createReservation(reservation: { pitch_id: number, start_at: string, duration: number }): Observable<Reservation> {
-    return this.http.post<Reservation>(this.apiUrl, reservation);
   }
 
   filterPitches(pitches: Pitch[], search: string = ''): Pitch[] {

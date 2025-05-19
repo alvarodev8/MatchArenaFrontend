@@ -22,6 +22,7 @@ export class ReservaFormComponent implements OnInit {
 
   constructor(
     private pitchsService: PitchsService,
+    private reservasService: ReservasService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -53,7 +54,7 @@ export class ReservaFormComponent implements OnInit {
       duration: this.duration
     };
 
-    this.pitchsService.createReservation(reservationData).subscribe({
+    this.reservasService.createReservation(reservationData).subscribe({
       next: (response) => {
         this.success = 'Reserva creada con éxito.';
         setTimeout(() => this.router.navigate(['/jugador/reservas']), 2000);
