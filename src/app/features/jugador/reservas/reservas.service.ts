@@ -8,11 +8,15 @@ import { Reservation } from '../../../core/models/reservation.model';
   providedIn: 'root'
 })
 export class ReservasService {
-  private apiUrl = `${environment.apiUrl}/reservations`;
+  private apiUrl = `${environment.apiUrl}/player/reservations`;
 
   constructor(private http: HttpClient) { }
 
   getReservations(): Observable<Reservation[]> {
     return this.http.get<Reservation[]>(this.apiUrl);
+  }
+
+  createReservation(reservation: { pitch_id: number, start_at: string, duration: number }): Observable<Reservation> {
+    return this.http.post<Reservation>(this.apiUrl, reservation);
   }
 }

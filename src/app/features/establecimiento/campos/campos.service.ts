@@ -8,7 +8,7 @@ import { Pitch } from '../../../core/models/pitch.model';
   providedIn: 'root'
 })
 export class PitchsService {
-  private apiUrl = `${environment.apiUrl}/pitches`;
+  private apiUrl = `${environment.apiUrl}/establishment/pitches`;
 
   constructor(private http: HttpClient) { }
 
