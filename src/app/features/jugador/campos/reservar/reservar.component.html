@@ -1,16 +1,57 @@
 <h2>Reservar</h2>
 <div *ngIf="pitch">
   <p><strong>Campo:</strong> {{ pitch.name }} - {{ pitch.location }}</p>
+
+  <!-- Calendario -->
+  <app-calendar [pitch]="pitch" [minDate]="minDate" [maxDate]="maxDate"
+    (dateSelected)="selectedDate = $event; updateAvailableTimes()"></app-calendar>
+
   <form (ngSubmit)="onSubmit()">
     <div>
-      <label for="startAt">Fecha y Hora:</label>
-      <input type="datetime-local" id="startAt" [(ngModel)]="startAt" name="startAt" required>
+      <label for="date">Fecha:</label>
+      <input
+        type="date"
+        id="date"
+        [(ngModel)]="selectedDate"
+        name="date"
+        (ngModelChange)="updateAvailableTimes()"
+        [min]="minDate"
+        [max]="maxDate"
+        [disabled]="selectedDate"
+        required
+      >
     </div>
     <div>
-      <label for="duration">Duración (minutos):</label>
-      <input type="number" id="duration" [(ngModel)]="duration" name="duration" min="30" max="120" required>
+      <label for="time">Hora:</label>
+      <select
+        id="time"
+        [(ngModel)]="selectedTime"
+        name="time"
+        (ngModelChange)="checkAvailability()"
+        required
+      >
+        <option value="" disabled>Selecciona una hora</option>
+        <option *ngFor="let time of availableTimes" [value]="time">
+          {{ time }}
+        </option>
+      </select>
     </div>
-    <button type="submit">Reservar</button>
+    <div>
+      <label for="duration">Duración:</label>
+      <select
+        id="duration"
+        [(ngModel)]="duration"
+        name="duration"
+        (ngModelChange)="checkAvailability()"
+        required
+      >
+        <option value="" disabled>Selecciona duración</option>
+        <option value="60">1 hora</option>
+        <option value="90">1 hora y 30 minutos</option>
+        <option value="120">2 horas</option>
+      </select>
+    </div>
+    <button type="submit" [disabled]="!isFormValid || error !== null">Reservar</button>
   </form>
 </div>
 <div *ngIf="error" class="error">{{ error }}</div>
