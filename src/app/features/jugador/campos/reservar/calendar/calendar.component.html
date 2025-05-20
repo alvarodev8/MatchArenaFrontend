@@ -1,0 +1,20 @@
+<div class="calendar">
+  <div class="calendar-header">
+    <button (click)="previousMonth()" [disabled]="!canGoToPreviousMonth">←</button>
+    <span>{{ currentMonthYear }}</span>
+    <button (click)="nextMonth()" [disabled]="currentMonth >= currentYearMonth + 2">→</button>
+  </div>
+  <div class="calendar-body">
+    <div class="calendar-day" *ngFor="let day of daysInMonth">
+      <span
+        [class.available]="day.available"
+        [class.unavailable]="!day.available"
+        [class.selected]="day.date === selectedDate"
+        (click)="selectDate(day.date)"
+        [class.disabled]="day.date < minDate || day.date > maxDate || !day.date"
+      >
+        {{ day.day || '' }}
+      </span>
+    </div>
+  </div>
+</div>
