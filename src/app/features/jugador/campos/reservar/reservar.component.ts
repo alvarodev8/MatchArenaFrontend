@@ -6,6 +6,7 @@ import { PitchsService } from '../campos.service';
 import { Pitch } from '../../../../core/models/pitch.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CalendarComponent } from './calendar/calendar.component';
+import { format, addDays, startOfToday, isAfter, parseISO } from 'date-fns';
 
 @Component({
   selector: 'app-jugador-campos-reservar',
@@ -34,11 +35,10 @@ export class ReservaFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const now = new Date();
-    this.minDate = now.toISOString().split('T')[0];
-    const maxDate = new Date(now);
-    maxDate.setDate(now.getDate() + 15);
-    this.maxDate = maxDate.toISOString().split('T')[0];
+    this.error = null;
+    const today = startOfToday();
+    this.minDate = format(today, 'yyyy-MM-dd');
+    this.maxDate = format(addDays(today, 14), 'yyyy-MM-dd');
 
     const pitchId = this.route.snapshot.paramMap.get('pitchId');
     if (pitchId) {
@@ -57,70 +57,48 @@ export class ReservaFormComponent implements OnInit {
   }
 
   private initializeDateAndTimes(): void {
-    const now = new Date();
-    let currentDate = new Date(now);
-    let foundAvailableDate = false;
-
-    this.selectedDate = currentDate.toISOString().split('T')[0];
-
-    const currentHour = now.getHours();
-    const currentMinutes = now.getMinutes();
-    let startHour = Math.max(currentHour, 8);
-    if (currentHour >= 22) {
-      startHour = 8;
-      currentDate.setDate(currentDate.getDate() + 1);
-      this.selectedDate = currentDate.toISOString().split('T')[0];
-    } else {
-      const nextHalfHour = Math.ceil(currentMinutes / 30) * 30;
-      if (nextHalfHour === 60) {
-        startHour += 1;
-      } else {
-        startHour = currentHour + (nextHalfHour === 0 ? 0 : 1);
-      }
+    if (!this.pitch) {
+      this.error = 'Campo no cargado correctamente.';
+      return;
     }
 
-    const minHour = `${String(startHour).padStart(2, '0')}:00`;
+    const today = startOfToday();
+    this.selectedDate = format(today, 'yyyy-MM-dd');
 
-    // Verificar el día actual
     this.reservasService.getAvailableTimes(this.pitch!.id, this.selectedDate).subscribe({
       next: (response) => {
-        this.availableTimes = response.availableTimes.filter(time => 
-          this.selectedDate === now.toISOString().split('T')[0] ? time >= minHour : true
-        );
+        this.availableTimes = response.availableTimes.filter(time => {
+          const [hours] = time.split(':').map(Number);
+          return this.selectedDate === this.minDate ? hours >= 8 : true;
+        });
 
         if (this.availableTimes.length > 0) {
           this.selectedTime = this.availableTimes[0];
-          foundAvailableDate = true;
           this.checkAvailability();
         } else {
-          // Si no hay horarios disponibles, buscar el siguiente día con disponibilidad
-          const maxDate = new Date(this.maxDate);
-          currentDate.setDate(currentDate.getDate() + 1); // Empezar desde el siguiente día
-          this.findNextAvailableDate(currentDate, maxDate, now, foundAvailableDate);
+          this.findNextAvailableDate(addDays(today, 1));
         }
       },
       error: (err) => this.error = 'Error al verificar disponibilidad: ' + (err.error?.message || err.message)
     });
   }
 
-  private findNextAvailableDate(currentDate: Date, maxDate: Date, now: Date, foundAvailableDate: boolean): void {
-    if (currentDate > maxDate) {
-      this.error = 'No hay horarios disponibles en los próximos 15 días.';
+  private findNextAvailableDate(currentDate: Date): void {
+    if (isAfter(currentDate, parseISO(this.maxDate))) {
+      this.error = 'No hay horarios disponibles en las próximas 2 semanas.';
       return;
     }
 
-    const dateStr = currentDate.toISOString().split('T')[0];
+    const dateStr = format(currentDate, 'yyyy-MM-dd');
     this.reservasService.getAvailableTimes(this.pitch!.id, dateStr).subscribe({
       next: (response) => {
         this.availableTimes = response.availableTimes;
         if (this.availableTimes.length > 0) {
           this.selectedDate = dateStr;
           this.selectedTime = this.availableTimes[0];
-          foundAvailableDate = true;
           this.checkAvailability();
         } else {
-          currentDate.setDate(currentDate.getDate() + 1);
-          this.findNextAvailableDate(currentDate, maxDate, now, foundAvailableDate);
+          this.findNextAvailableDate(addDays(currentDate, 1));
         }
       },
       error: (err) => this.error = 'Error al verificar disponibilidad: ' + (err.error?.message || err.message)
@@ -129,39 +107,22 @@ export class ReservaFormComponent implements OnInit {
 
   updateAvailableTimes(): void {
     if (!this.pitch || !this.selectedDate) return;
-    const now = new Date();
+
     this.reservasService.getAvailableTimes(this.pitch.id, this.selectedDate).subscribe({
       next: (response) => {
-        this.availableTimes = response.availableTimes.filter(time => 
-          this.selectedDate === now.toISOString().split('T')[0] ? time >= this.getMinHour(now) : true
-        );
+        this.availableTimes = response.availableTimes.filter(time => {
+          const [hours] = time.split(':').map(Number);
+          return this.selectedDate === this.minDate ? hours >= 8 : true;
+        });
         if (this.availableTimes.length > 0) {
           this.selectedTime = this.availableTimes[0];
+          this.checkAvailability();
         } else {
-          // Si no hay horarios disponibles, buscar el siguiente día
-          const maxDate = new Date(this.maxDate);
-          const currentDate = new Date(this.selectedDate);
-          currentDate.setDate(currentDate.getDate() + 1);
-          this.findNextAvailableDate(currentDate, maxDate, now, false);
-          return;
+          this.findNextAvailableDate(addDays(parseISO(this.selectedDate), 1));
         }
-        this.checkAvailability();
       },
       error: (err) => this.error = 'Error al cargar horas disponibles: ' + (err.error?.message || err.message)
     });
-  }
-
-  private getMinHour(now: Date): string {
-    const currentHour = now.getHours();
-    const currentMinutes = now.getMinutes();
-    let startHour = Math.max(currentHour, 8);
-    const nextHalfHour = Math.ceil(currentMinutes / 30) * 30;
-    if (nextHalfHour === 60) {
-      startHour += 1;
-    } else {
-      startHour = currentHour + (nextHalfHour === 0 ? 0 : 1);
-    }
-    return `${String(startHour).padStart(2, '0')}:00`;
   }
 
   checkAvailability(): void {
