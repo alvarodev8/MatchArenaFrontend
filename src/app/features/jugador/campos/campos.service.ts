@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { Pitch } from '../../../core/models/pitch.model';
 
 @Injectable({
@@ -9,11 +10,29 @@ import { Pitch } from '../../../core/models/pitch.model';
 })
 export class PitchsService {
   private apiUrl = `${environment.apiUrl}/player/pitches`;
+  private pitchesSubject = new BehaviorSubject<Pitch[]>([]);
+  private searchTermSubject = new BehaviorSubject<string>('');
+
+  pitches$ = this.pitchesSubject.asObservable();
+  filteredPitches$ = combineLatest([this.pitches$, this.searchTermSubject]).pipe(
+    debounceTime(300), // Retrasa la emisión 300ms para evitar actualizaciones excesivas
+    distinctUntilChanged(), // Evita emisiones si no hay cambios en los datos
+    map(([pitches, search]) => this.filterPitches(pitches, search)) // Aplica el filtrado
+  );
 
   constructor(private http: HttpClient) { }
 
   getPitches(): Observable<Pitch[]> {
-    return this.http.get<Pitch[]>(this.apiUrl);
+    return this.http.get<Pitch[]>(this.apiUrl).pipe(
+      map(pitches => {
+        this.pitchesSubject.next(pitches); // Actualiza el subject con los datos obtenidos
+        return pitches;
+      })
+    );
+  }
+
+  setSearchTerm(search: string): void {
+    this.searchTermSubject.next(search); // Emite el nuevo término de búsqueda
   }
 
   filterPitches(pitches: Pitch[], search: string = ''): Pitch[] {
