@@ -1,60 +1,16 @@
-button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
+:host ::ng-deep .fc {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Estilo para cuando se hace hover a un dia dentro del rango */
+:host ::ng-deep .fc-daygrid-day:has(.in-range):hover {
   cursor: pointer;
+  background-color: #9fc2e8;
+  transition: background-color 0.5s ease;
 }
 
-button:hover {
-  background-color: #0056b3;
-}
-
-.calendar {
-    margin-bottom: 20px;
-}
-
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.calendar-body {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-}
-
-.calendar-day {
-    text-align: center;
-}
-
-.calendar-day span {
-    display: block;
-    padding: 5px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.calendar-day .available {
-    background-color: #28a745;
-    color: white;
-}
-
-.calendar-day .unavailable {
-    background-color: #cccccc;
-    color: #666;
-    display: none;
-}
-
-.calendar-day .selected {
-    border: 2px solid #007bff;
-}
-
-.calendar-day .disabled {
-    background-color: #f0f0f0;
-    color: #999;
-    cursor: not-allowed;
+/* Estilo para el día seleccionado */
+:host ::ng-deep .fc-daygrid-day:has(.selected-day) {
+  background-color: #d1bee4;
 }
