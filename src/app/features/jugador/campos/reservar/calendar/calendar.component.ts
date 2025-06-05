@@ -61,9 +61,9 @@ export class CalendarComponent implements OnInit {
 
     private loadAvailableDates(): void {
         this.reservasService.getAvailableDates(this.pitch!.id, this.minDate, this.maxDate).subscribe({
-            next: (availableDatesResponse) => {
+            next: (response) => {
                 const availableDatesMap = new Map<string, boolean>();
-                availableDatesResponse.forEach(date => {
+                response.dates.forEach(date => {
                     availableDatesMap.set(date.date, date.available);
                 });
 
