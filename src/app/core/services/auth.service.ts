@@ -90,12 +90,15 @@ export class AuthService {
   }
 
   logout(): void {
+    if (this.isAuthenticated()) {
+      this.http.post(`${this.apiUrl}/logout`, {}).subscribe({
+        error: (err) => console.error('Error al cerrar sesión:', err)
+      });
+    }
+
     this.currentUser = null;
     localStorage.removeItem('user');
     localStorage.removeItem('auth_token');
-    this.http.post(`${this.apiUrl}/logout`, {}).subscribe({
-      error: (err) => console.error('Error al cerrar sesión:', err)
-    });
   }
 
   getCurrentUser(): User | null {
