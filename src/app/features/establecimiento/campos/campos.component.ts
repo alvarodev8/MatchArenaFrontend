@@ -18,7 +18,7 @@ export class CamposComponent implements OnInit {
 
   ngOnInit(): void {
     this.pitchesService.getPitches().subscribe({
-      next: (pitches) => this.pitches = pitches,
+      next: (response) => this.pitches = response.pitches,
       error: (err) => {
         this.error = 'Error al obtener los campos: ' + (err.error?.message || err.message);
         console.error('Error al obtener campos:', err);

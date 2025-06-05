@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
-import { User } from '../../../core/models/user.model';
+import { UserResponse } from '../../../core/models/api-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class PerfilService {
 
   constructor(private http: HttpClient) { }
 
-  getProfile(): Observable<User> {
-    return this.http.get<User>(this.apiUrl);
+  getProfile(): Observable<UserResponse> {
+    return this.http.get<UserResponse>(this.apiUrl);
   }
 }

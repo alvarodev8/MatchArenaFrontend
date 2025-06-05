@@ -43,8 +43,8 @@ export class ReservaFormComponent implements OnInit {
     const pitchId = this.route.snapshot.paramMap.get('pitchId');
     if (pitchId) {
       this.pitchsService.getPitches().subscribe({
-        next: (pitches) => {
-          this.pitch = pitches.find(p => p.id === +pitchId) || null;
+        next: (response) => {
+          this.pitch = response.pitches.find(p => p.id === +pitchId) || null;
           if (!this.pitch) {
             this.error = 'Campo no encontrado.';
           } else {

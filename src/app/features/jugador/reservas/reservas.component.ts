@@ -11,14 +11,14 @@ import { CommonModule } from '@angular/common';
   styleUrl: './reservas.component.scss'
 })
 export class ReservasComponent implements OnInit {
-  reservations: Reservation[] = [];;
+  reservations: Reservation[] = [];
   error: string | null = null;
 
   constructor(private reservasService: ReservasService) { }
 
   ngOnInit(): void {
     this.reservasService.getReservations().subscribe({
-      next: (reservations) => this.reservations = reservations,
+      next: (response) => this.reservations = response.reservations || [],
       error: (err) => {
         this.error = 'Error al obtener las reservas: ' + (err.error?.message || err.message);
         console.error('Error al obtener reservas:', err);

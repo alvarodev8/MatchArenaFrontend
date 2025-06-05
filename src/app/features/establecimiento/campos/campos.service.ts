@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
-import { Pitch } from '../../../core/models/pitch.model';
+import { PitchesResponse } from '../../../core/models/api-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class PitchsService {
 
   constructor(private http: HttpClient) { }
 
-  getPitches(): Observable<Pitch[]> {
-    return this.http.get<Pitch[]>(this.apiUrl);
+  getPitches(): Observable<PitchesResponse> {
+    return this.http.get<PitchesResponse>(this.apiUrl);
   }
 }

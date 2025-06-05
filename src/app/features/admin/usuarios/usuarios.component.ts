@@ -18,7 +18,7 @@ export class UsuariosComponent implements OnInit {
 
   ngOnInit(): void {
     this.usuariosService.getUsuarios().subscribe({
-      next: (users) => this.users = users,
+      next: (response) => this.users = response.users,
       error: (err) => this.error = 'Error al cargar los usuarios: ' + (err.error?.message || err.message)
     });
   }

@@ -18,7 +18,7 @@ export class PerfilComponent implements OnInit {
 
   ngOnInit(): void {
     this.perfilService.getProfile().subscribe({
-      next: (user) => this.user = user,
+      next: (response) => this.user = response.user,
       error: (err) => {
         this.error = 'Error al obtener el perfil: ' + (err.error?.message || err.message);
         console.error('Error al obtener el perfil:', err);
