@@ -1,9 +1,12 @@
 <h2>Perfil</h2>
-<div *ngIf="user">
+@if (user) {
+<div>
     <p><strong>Nombre:</strong> {{ user.name }}</p>
     <p><strong>Email:</strong> {{ user.email }}</p>
     <p><strong>Rol:</strong> {{ user.role }}</p>
 </div>
-<div *ngIf="error" class="error">
+} @if (error) {
+<div class="error">
     {{ error }}
 </div>
+}
