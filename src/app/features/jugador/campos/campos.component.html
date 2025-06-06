@@ -3,9 +3,10 @@
   <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange($event)"
     placeholder="Buscar campos por nombre o ubicación">
 </div>
-<ng-container *ngIf="filteredPitches$ | async as pitches">
+@if (filteredPitches$ | async; as pitches) {
   <div class="pitch-cards">
-    <div *ngFor="let pitch of pitches" class="pitch-card">
+    @for (pitch of pitches; track pitch.id) {
+    <div class="pitch-card">
       <h3>{{ pitch.name }}</h3>
       <p><strong>Ubicación:</strong> {{ pitch.location }}</p>
       <p><strong>Establecimiento:</strong> {{ pitch?.establishment?.name }}</p>
@@ -14,7 +15,12 @@
         <a [routerLink]="['/jugador/reserva', pitch.id]" class="btn btn-reserve">Reservar</a>
       </div>
     </div>
+    }
   </div>
-  <div *ngIf="!pitches.length && !error && !loading" class="no-results">No se encontraron campos.</div>
-</ng-container>
-<div *ngIf="error" class="error">{{ error }}</div>
+  @if (!pitches.length && !error && !loading) {
+  <div class="no-results">No se encontraron campos.</div>
+  }
+}
+@if (error) {
+<div class="error">{{ error }}</div>
+}
