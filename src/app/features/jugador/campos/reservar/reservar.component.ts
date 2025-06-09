@@ -73,7 +73,7 @@ export class ReservaFormComponent implements OnInit {
 
     this.reservasService.getAvailableTimes(this.pitch!.id, this.selectedDate).subscribe({
       next: (response) => {
-        this.availableTimes = response.availableTimes.filter(time => {
+        this.availableTimes = response.availableTimes.filter((time: string) => {
           const [hours] = time.split(':').map(Number);
           return this.selectedDate === this.minDate ? hours >= 8 : true;
         });
@@ -99,6 +99,7 @@ export class ReservaFormComponent implements OnInit {
     this.reservasService.getAvailableTimes(this.pitch!.id, dateStr).subscribe({
       next: (response) => {
         this.availableTimes = response.availableTimes;
+
         if (this.availableTimes.length > 0) {
           this.selectedDate = dateStr;
           this.selectedTime = this.availableTimes[0];
@@ -116,10 +117,11 @@ export class ReservaFormComponent implements OnInit {
 
     this.reservasService.getAvailableTimes(this.pitch.id, this.selectedDate).subscribe({
       next: (response) => {
-        this.availableTimes = response.availableTimes.filter(time => {
+        this.availableTimes = response.availableTimes.filter((time: string) => {
           const [hours] = time.split(':').map(Number);
           return this.selectedDate === this.minDate ? hours >= 8 : true;
         });
+
         if (this.availableTimes.length > 0) {
           this.selectedTime = this.availableTimes[0];
           this.checkAvailability();
