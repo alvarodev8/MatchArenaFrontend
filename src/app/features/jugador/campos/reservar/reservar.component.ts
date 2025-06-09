@@ -73,7 +73,7 @@ export class ReservaFormComponent implements OnInit {
 
     this.reservasService.getAvailableTimes(this.pitch!.id, this.selectedDate).subscribe({
       next: (response) => {
-        this.availableTimes = response.availableTimes.filter(time => {
+        this.availableTimes = response.availableTimes.filter((time: string) => {
           const [hours] = time.split(':').map(Number);
           return this.selectedDate === this.minDate ? hours >= 8 : true;
         });
@@ -99,6 +99,7 @@ export class ReservaFormComponent implements OnInit {
     this.reservasService.getAvailableTimes(this.pitch!.id, dateStr).subscribe({
       next: (response) => {
         this.availableTimes = response.availableTimes;
+
         if (this.availableTimes.length > 0) {
           this.selectedDate = dateStr;
           this.selectedTime = this.availableTimes[0];
@@ -116,10 +117,11 @@ export class ReservaFormComponent implements OnInit {
 
     this.reservasService.getAvailableTimes(this.pitch.id, this.selectedDate).subscribe({
       next: (response) => {
-        this.availableTimes = response.availableTimes.filter(time => {
+        this.availableTimes = response.availableTimes.filter((time: string) => {
           const [hours] = time.split(':').map(Number);
           return this.selectedDate === this.minDate ? hours >= 8 : true;
         });
+
         if (this.availableTimes.length > 0) {
           this.selectedTime = this.availableTimes[0];
           this.checkAvailability();
@@ -179,9 +181,15 @@ export class ReservaFormComponent implements OnInit {
 
     this.reservasService.createReservation(reservationData).subscribe({
       next: (response) => {
-        this.success = 'Reserva creada con éxito.';
+        this.success = response.message || null;
         this.updateAvailableTimes();
-        setTimeout(() => this.router.navigate(['/jugador/reservas']), 2000);
+        setTimeout(() => {
+          if (this.success) {
+            this.router.navigate(['/jugador/reservas'], { queryParams: { success: this.success } });
+          } else {
+            this.router.navigate(['/jugador/reservas']);
+          }
+        }, 1000);
       },
       error: (err) => {
         this.error = 'Error al crear la reserva: ' + (err.error?.message || err.message);
