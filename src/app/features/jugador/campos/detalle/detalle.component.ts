@@ -4,17 +4,19 @@ import { PitchsService } from '../campos.service';
 import { Pitch } from '../../../../core/models/pitch.model';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'app-jugador-campos-detalles',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, LoadingComponent],
   templateUrl: './detalle.component.html',
   styleUrls: ['./detalle.component.scss']
 })
 export class CampoDetallesComponent implements OnInit {
   pitch: Pitch | null = null;
   error: string | null = null;
+  isLoading: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,7 +35,8 @@ export class CampoDetallesComponent implements OnInit {
         },
         error: (err) => {
           this.error = 'Error al cargar los detalles del campo: ' + (err.error?.message || err.message);
-        }
+        },
+        complete: () => this.isLoading = false,
       });
     }
   }
