@@ -1,11 +1,23 @@
 <h2>Campos</h2>
-<ul>
-    @for (pitch of pitches; track pitch.id) {
-    <li>{{ pitch.name }} - {{ pitch.location }}</li>
+
+<app-loading [isLoading]="isLoading"></app-loading>
+
+@if (!isLoading) {
+<div class="content">
+    @if (pitches.length) {
+    <ul class="list-group">
+        @for (pitch of pitches; track pitch.id) {
+        <li class="list-group-item">{{ pitch.name }} - {{ pitch.location }}</li>
+        }
+    </ul>
+    } @else if (!pitches.length && !error) {
+    <div class="alert alert-info">
+        No hay campos registrados.
+    </div>
+    } @else if (error) {
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
     }
-</ul>
-@if (error) {
-<div class="error">
-    {{ error }}
 </div>
 }

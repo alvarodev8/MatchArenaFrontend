@@ -1,11 +1,20 @@
-@if (pitch) {
-<div class="pitch-details">
-  <h2>{{ pitch.name }}</h2>
-  <p><strong>Ubicación:</strong> {{ pitch.location }}</p>
-  <p><strong>Establecimiento:</strong> {{ pitch.establishment?.name }}</p>
-  <a [routerLink]="['/jugador/reserva', pitch.id]" class="btn btn-primary">Reservar este campo</a>
-  <a [routerLink]="['/jugador/campos']" class="btn btn-secondary">Volver</a>
+<h2>Detalles del Campo</h2>
+
+<app-loading [isLoading]="isLoading"></app-loading>
+
+@if (!isLoading) {
+<div class="content">
+  @if (pitch) {
+  <div class="pitch-details">
+    <h2>{{ pitch.name }}</h2>
+    <p><strong>Ubicación:</strong> {{ pitch.location }}</p>
+    <p><strong>Establecimiento:</strong> {{ pitch.establishment?.name }}</p>
+    <a [routerLink]="['/jugador/reserva', pitch.id]" class="btn btn-primary">Reservar este campo</a>
+    <a [routerLink]="['/jugador/campos']" class="btn btn-secondary">Volver</a>
+  </div>
+  }
+  @if (error) {
+  <div class="alert alert-danger">{{ error }}</div>
+  }
 </div>
-} @if (error) {
-<div class="error">{{ error }}</div>
 }

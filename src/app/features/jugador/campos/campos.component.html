@@ -3,7 +3,12 @@
   <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange($event)"
     placeholder="Buscar campos por nombre o ubicación">
 </div>
-@if (filteredPitches$ | async; as pitches) {
+
+<app-loading [isLoading]="isLoading"></app-loading>
+
+@if (!isLoading) {
+<div class="content">
+  @if (filteredPitches$ | async; as pitches) {
   <div class="pitch-cards">
     @for (pitch of pitches; track pitch.id) {
     <div class="pitch-card">
@@ -17,10 +22,12 @@
     </div>
     }
   </div>
-  @if (!pitches.length && !error && !loading) {
-  <div class="no-results">No se encontraron campos.</div>
+  @if (!pitches.length && !error) {
+  <div class="alert alert-info">No se encontraron campos.</div>
   }
-}
-@if (error) {
-<div class="error">{{ error }}</div>
+  }
+  @if (error) {
+  <div class="alert alert-danger">{{ error }}</div>
+  }
+</div>
 }

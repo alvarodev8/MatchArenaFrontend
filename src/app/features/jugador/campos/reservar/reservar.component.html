@@ -1,64 +1,73 @@
 <h2>Reservar</h2>
-@if (pitch) {
-<div>
-  <p><strong>Campo:</strong> {{ pitch.name }} - {{ pitch.location }}</p>
 
-  <!-- Calendario -->
-  <app-calendar [pitch]="pitch" [minDate]="minDate" [maxDate]="maxDate"
-    (dateSelected)="selectedDate = $event; updateAvailableTimes()"></app-calendar>
+<app-loading [isLoading]="isLoading"></app-loading>
 
-  <form (ngSubmit)="onSubmit()">
-    <div>
-      <label for="date">Fecha:</label>
-      <input
-        type="date"
-        id="date"
-        [(ngModel)]="selectedDate"
-        name="date"
-        (ngModelChange)="updateAvailableTimes()"
-        [min]="minDate"
-        [max]="maxDate"
-        [disabled]="selectedDate"
-        required
-      >
-    </div>
-    <div>
-      <label for="time">Hora:</label>
-      <select
-        id="time"
-        [(ngModel)]="selectedTime"
-        name="time"
-        (ngModelChange)="checkAvailability()"
-        required
-      >
-        <option value="" disabled>Selecciona una hora</option>
-        @for (time of availableTimes; track time) {
-        <option [value]="time">
-          {{ time }}
-        </option>
-        }
-      </select>
-    </div>
-    <div>
-      <label for="duration">Duración:</label>
-      <select
-        id="duration"
-        [(ngModel)]="duration"
-        name="duration"
-        (ngModelChange)="checkAvailability()"
-        required
-      >
-        <option value="" disabled>Selecciona duración</option>
-        <option value="60">1 hora</option>
-        <option value="90">1 hora y 30 minutos</option>
-        <option value="120">2 horas</option>
-      </select>
-    </div>
-    <button type="submit" [disabled]="!isFormValid || error !== null">Reservar</button>
-  </form>
+@if (!isLoading) {
+<div class="content">
+  @if (pitch) {
+  <div>
+    <p><strong>Campo:</strong> {{ pitch.name }} - {{ pitch.location }}</p>
+
+    <!-- Calendario -->
+    <app-calendar [pitch]="pitch" [minDate]="minDate" [maxDate]="maxDate"
+      (dateSelected)="selectedDate = $event; updateAvailableTimes()"></app-calendar>
+
+    <form (ngSubmit)="onSubmit()">
+      <div>
+        <label for="date">Fecha:</label>
+        <input
+          type="date"
+          id="date"
+          [(ngModel)]="selectedDate"
+          name="date"
+          (ngModelChange)="updateAvailableTimes()"
+          [min]="minDate"
+          [max]="maxDate"
+          [disabled]="selectedDate"
+          required
+        >
+      </div>
+      <div>
+        <label for="time">Hora:</label>
+        <select
+          id="time"
+          [(ngModel)]="selectedTime"
+          name="time"
+          (ngModelChange)="checkAvailability()"
+          required
+        >
+          <option value="" disabled>Selecciona una hora</option>
+          @for (time of availableTimes; track time) {
+          <option [value]="time">
+            {{ time }}
+          </option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="duration">Duración:</label>
+        <select
+          id="duration"
+          [(ngModel)]="duration"
+          name="duration"
+          (ngModelChange)="checkAvailability()"
+          required
+        >
+          <option value="" disabled>Selecciona duración</option>
+          <option value="60">1 hora</option>
+          <option value="90">1 hora y 30 minutos</option>
+          <option value="120">2 horas</option>
+        </select>
+      </div>
+      <button type="submit" [disabled]="!isFormValid || error !== null">Reservar</button>
+    </form>
+  </div>
+  }
+  @if (error) {
+  <div class="alert alert-danger">{{ error }}</div>
+  }
+  @if (success) {
+  <div class="alert alert-success">{{ success }}</div>
+  }
 </div>
-} @if (error) {
-<div class="error">{{ error }}</div>
-} @if (success) {
-<div class="success">{{ success }}</div>
 }

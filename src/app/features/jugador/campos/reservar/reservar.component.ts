@@ -7,11 +7,12 @@ import { Pitch } from '../../../../core/models/pitch.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CalendarComponent } from './calendar/calendar.component';
 import { format, addDays, startOfToday, isAfter, parseISO } from 'date-fns';
+import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'app-jugador-campos-reservar',
   standalone: true,
-  imports: [CommonModule, FormsModule, CalendarComponent],
+  imports: [CommonModule, FormsModule, CalendarComponent, LoadingComponent],
   templateUrl: './reservar.component.html',
   styleUrls: ['./reservar.component.scss']
 })
@@ -26,6 +27,7 @@ export class ReservaFormComponent implements OnInit {
   maxDate: string = '';
   availableTimes: string[] = [];
   isFormValid: boolean = false;
+  isLoading: boolean = true;
 
   constructor(
     private pitchsService: PitchsService,
@@ -51,8 +53,12 @@ export class ReservaFormComponent implements OnInit {
             this.initializeDateAndTimes();
           }
         },
-        error: (err) => this.error = 'Error al cargar el campo: ' + (err.error?.message || err.message)
+        error: (err) => this.error = 'Error al cargar el campo: ' + (err.error?.message || err.message),
+        complete: () => this.isLoading = false
       });
+    } else {
+      this.error = 'ID del campo no proporcionado.';
+      this.isLoading = false;
     }
   }
 

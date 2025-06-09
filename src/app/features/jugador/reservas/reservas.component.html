@@ -1,13 +1,21 @@
 <h2>Reservas</h2>
-<ul>
-    @for (reservation of reservations; track reservation.id) {
-    <li>{{ reservation.start_at | date:'medium' }} - {{ reservation.duration }} min - {{ reservation.pitch.name }} ({{
-        reservation.pitch.location }})
-    </li>
+
+<app-loading [isLoading]="isLoading"></app-loading>
+
+@if (!isLoading) {
+<div class="content">
+    <ul>
+        @for (reservation of reservations; track reservation.id) {
+        <li>{{ reservation.start_at | date:'medium' }} - {{ reservation.duration }} min - {{ reservation.pitch.name }}
+            ({{
+            reservation.pitch.location }})
+        </li>
+        }
+    </ul>
+    @if (error) {
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
     }
-</ul>
-@if (error) {
-<div class="error">
-    {{ error }}
 </div>
 }

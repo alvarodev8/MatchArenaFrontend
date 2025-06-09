@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
+import { LoadingComponent } from '../../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'app-jugador-campos',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, LoadingComponent],
   templateUrl: './campos.component.html',
   styleUrls: ['./campos.component.scss']
 })
@@ -18,7 +19,7 @@ export class CamposComponent implements OnInit {
   filteredPitches$!: Observable<Pitch[]>;
   error: string | null = null;
   searchTerm: string = '';
-  loading: boolean = false;
+  isLoading: boolean = true;
 
   constructor(private pitchsService: PitchsService) { }
 
@@ -29,12 +30,13 @@ export class CamposComponent implements OnInit {
   }
 
   loadPitches(): void {
-    this.loading = true;
     this.pitchsService.getPitches().subscribe({
-      next: () => this.loading = false,
+      next: () => this.error = null,
       error: (err) => {
         this.error = 'Error al obtener los campos: ' + (err.error?.message || err.message);
-        this.loading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
       }
     });
   }
