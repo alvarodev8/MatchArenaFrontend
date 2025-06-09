@@ -1,31 +1,38 @@
 <h2>Gestión de Usuarios</h2>
-@if (users?.length) {
-<div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Rol</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (user of users; track user.id) {
-            <tr>
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.role }}</td>
-            </tr>
-            }
-        </tbody>
-    </table>
-</div>
-} @else if (!users?.length && !error) {
-<div class="alert alert-info">
-    No hay usuarios registrados.
-</div>
-} @else if (error) {
-<div class="alert alert-danger">
-    {{ error }}
+
+<app-loading [isLoading]="isLoading"></app-loading>
+
+@if (!isLoading) {
+<div class="content">
+    @if (users?.length) {
+    <div class="table-container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (user of users; track user.id) {
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.role }}</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    } @else if (!users?.length && !error) {
+    <div class="alert alert-info">
+        No hay usuarios registrados.
+    </div>
+    } @else if (error) {
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    }
 </div>
 }
