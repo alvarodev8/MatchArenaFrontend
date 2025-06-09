@@ -179,9 +179,15 @@ export class ReservaFormComponent implements OnInit {
 
     this.reservasService.createReservation(reservationData).subscribe({
       next: (response) => {
-        this.success = 'Reserva creada con éxito.';
+        this.success = response.message || null;
         this.updateAvailableTimes();
-        setTimeout(() => this.router.navigate(['/jugador/reservas']), 2000);
+        setTimeout(() => {
+          if (this.success) {
+            this.router.navigate(['/jugador/reservas'], { queryParams: { success: this.success } });
+          } else {
+            this.router.navigate(['/jugador/reservas']);
+          }
+        }, 1000);
       },
       error: (err) => {
         this.error = 'Error al crear la reserva: ' + (err.error?.message || err.message);
