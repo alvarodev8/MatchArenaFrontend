@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Reservation } from '../../../core/models/reservation.model';
 import { ReservasService } from './reservas.service';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { LoadingComponent } from '../../../shared/components/loading/loading.component';
 
 @Component({
@@ -13,12 +14,24 @@ import { LoadingComponent } from '../../../shared/components/loading/loading.com
 })
 export class ReservasComponent implements OnInit {
   reservations: Reservation[] = [];
+  successMessage: string | null = null;
   error: string | null = null;
   isLoading: boolean = true;
 
-  constructor(private reservasService: ReservasService) { }
+  constructor(
+    private reservasService: ReservasService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.successMessage = params['success'] || null;
+    });
+
+    this.loadReservations();
+  }
+
+  loadReservations(): void {
     this.reservasService.getReservations().subscribe({
       next: (response) => this.reservations = response.reservations || [],
       error: (err) => {
@@ -28,4 +41,5 @@ export class ReservasComponent implements OnInit {
       complete: () => this.isLoading = false
     });
   }
+
 }

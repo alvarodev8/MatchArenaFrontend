@@ -4,6 +4,11 @@
 
 @if (!isLoading) {
 <div class="content">
+    @if (successMessage) {
+    <div class="alert alert-success">
+        {{ successMessage }}
+    </div>
+    }
     <ul>
         @for (reservation of reservations; track reservation.id) {
         <li>{{ reservation.start_at | date:'medium' }} - {{ reservation.duration }} min - {{ reservation.pitch.name }}
@@ -12,6 +17,11 @@
         </li>
         }
     </ul>
+    @if (reservations.length === 0 && !error) {
+    <div class="alert alert-info">
+        Todavía no tienes ninguna reserva
+    </div>
+    }
     @if (error) {
     <div class="alert alert-danger">
         {{ error }}
