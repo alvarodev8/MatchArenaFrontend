@@ -1,0 +1,21 @@
+<h2>Pago de la Reserva</h2>
+
+<app-loading [isLoading]="isLoading"></app-loading>
+
+<div class="content">
+  
+  <label for="amount">Precio:</label>
+  <label>{{ amount | currency:'EUR':'symbol':'1.2-2' }}</label>
+
+  <label>Datos de la tarjeta:</label>
+  <div id="card-element" class="card-element"></div>
+
+  <button type="submit" (click)="onSubmit()" [disabled]="isLoading">Pagar y Reservar</button>
+
+</div>
+@if (error) {
+<div class="alert alert-danger">{{ error }}</div>
+}
+@if (success) {
+<div class="alert alert-success">{{ success }}</div>
+}
