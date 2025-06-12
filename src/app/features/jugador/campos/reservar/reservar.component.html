@@ -12,7 +12,7 @@
     <app-calendar [pitch]="pitch" [minDate]="minDate" [maxDate]="maxDate"
       (dateSelected)="selectedDate = $event; updateAvailableTimes()"></app-calendar>
 
-    <form (ngSubmit)="onSubmit()">
+    <form (ngSubmit)="createPaymentIntent()">
       <div>
         <label for="date">Fecha:</label>
         <input
@@ -59,15 +59,20 @@
           <option value="120">2 horas</option>
         </select>
       </div>
-      <button type="submit" [disabled]="!isFormValid || error !== null">Reservar</button>
+      @if (isFormValid) {
+      <button type="button" (click)="createPaymentIntent()">Iniciar Pago</button>
+      }
+      @if (error) {
+      <div class="alert alert-danger">{{ error }}</div>
+      }
+      @if (success) {
+      <div class="alert alert-success">{{ success }}</div>
+      }
     </form>
   </div>
   }
-  @if (error) {
+  @if (error && !pitch) {
   <div class="alert alert-danger">{{ error }}</div>
-  }
-  @if (success) {
-  <div class="alert alert-success">{{ success }}</div>
   }
 </div>
 }

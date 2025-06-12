@@ -8,6 +8,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CalendarComponent } from './calendar/calendar.component';
 import { format, addDays, startOfToday, isAfter, parseISO } from 'date-fns';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
+import { ReservationStateService } from '../../../../core/services/reservation-state.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-jugador-campos-reservar',
@@ -32,6 +34,7 @@ export class ReservaFormComponent implements OnInit {
   constructor(
     private pitchsService: PitchsService,
     private reservasService: ReservasService,
+    private reservationStateService: ReservationStateService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -166,34 +169,37 @@ export class ReservaFormComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
-    if (!this.isFormValid || this.error) {
-      this.error = 'No se puede realizar la reserva. Verifica la disponibilidad.';
+  async createPaymentIntent(): Promise<void> {
+    if (!this.isFormValid || this.error || !this.pitch) {
+      this.error = 'No se puede iniciar el pago. Verifica la disponibilidad.';
       return;
     }
 
+    this.isLoading = true;
     const startAt = `${this.selectedDate} ${this.selectedTime}:00`;
-    const reservationData = {
-      pitch_id: this.pitch!.id,
+    const paymentIntentData = {
+      pitch_id: this.pitch.id,
       start_at: startAt,
       duration: this.duration
     };
 
-    this.reservasService.createReservation(reservationData).subscribe({
-      next: (response) => {
-        this.success = response.message || null;
-        this.updateAvailableTimes();
-        setTimeout(() => {
-          if (this.success) {
-            this.router.navigate(['/jugador/reservas'], { queryParams: { success: this.success } });
-          } else {
-            this.router.navigate(['/jugador/reservas']);
-          }
-        }, 1000);
-      },
-      error: (err) => {
-        this.error = 'Error al crear la reserva: ' + (err.error?.message || err.message);
+    try {
+      const response = await lastValueFrom(this.reservasService.createPaymentIntent(paymentIntentData));
+      if (response && response.client_secret) {
+        this.reservationStateService.setReservationData({
+          pitch_id: this.pitch.id,
+          start_at: startAt,
+          duration: this.duration,
+          client_secret: response.client_secret
+        });
+        this.router.navigate([`/jugador/campo/${this.pitch.id}/reservar/pagar`]);
+      } else {
+        throw new Error('No se recibió un client_secret válido del servidor.');
       }
-    });
+    } catch (err: any) {
+      this.error = 'Error al iniciar el pago: ' + (err.error?.message || err.message || 'Intenta de nuevo más tarde');
+    } finally {
+      this.isLoading = false;
+    }
   }
 }

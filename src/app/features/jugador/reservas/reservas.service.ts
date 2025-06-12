@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
-import { ReservationsResponse, ReservationResponse, AvailabilityResponse, AvailableTimesResponse, AvailableDatesResponse } from '../../../core/models/api-response.model';
+import {
+  ReservationsResponse, ReservationResponse, AvailabilityResponse, AvailableTimesResponse,
+  AvailableDatesResponse, CreatePaymentIntentResponse
+} from '../../../core/models/api-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +37,9 @@ export class ReservasService {
     return this.http.get<AvailableDatesResponse>(`${this.apiUrl}/available-dates`, {
       params: { pitch_id: pitchId.toString(), start_date: startDate, end_date: endDate }
     });
+  }
+
+  createPaymentIntent(data: { pitch_id: number; start_at: string; duration: number }): Observable<CreatePaymentIntentResponse> {
+    return this.http.post<CreatePaymentIntentResponse>(`${this.apiUrl}/create-payment-intent`, data);
   }
 }
