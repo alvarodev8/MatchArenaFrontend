@@ -41,3 +41,8 @@ export interface AvailabilityResponse {
     message?: string;
     available: boolean;
 }
+
+export interface CreatePaymentIntentResponse {
+    message?: string;
+    client_secret: string;
+}
