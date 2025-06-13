@@ -5,3 +5,44 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
 }
+
+.btn {
+  border-radius: 4px;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+
+  label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+}
+
+.alert {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+@media (max-width: 576px) {
+  .btn {
+    padding: 0.75rem;
+    font-size: 1.1rem;
+  }
+}
