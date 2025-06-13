@@ -1,0 +1,29 @@
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-control {
+    transition: border-color 0.2s;
+
+    &:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+}
+
+.invalid-feedback {
+    font-size: 0.85rem;
+}
+
+@media (max-width: 576px) {
+    .card {
+        padding: 1rem;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}

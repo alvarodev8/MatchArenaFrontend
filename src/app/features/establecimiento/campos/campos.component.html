@@ -1,15 +1,51 @@
-<h2>Campos</h2>
+<h2>Gestión de Campos</h2>
 
 <app-loading [isLoading]="isLoading"></app-loading>
 
 @if (!isLoading) {
 <div class="content">
     @if (pitches.length) {
-    <ul class="list-group">
-        @for (pitch of pitches; track pitch.id) {
-        <li class="list-group-item">{{ pitch.name }} - {{ pitch.location }}</li>
-        }
-    </ul>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Ubicación</th>
+                    <th>Precio</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (pitch of pitches; track pitch.id) {
+                <tr>
+                    <td>{{ pitch.name }}</td>
+                    <td>{{ pitch.location }}</td>
+                    <td>{{ pitch.price | currency:'EUR' }}</td>
+                    <td>{{ pitch.description || '-' }}</td>
+                    <td>
+                        @if (pitch.deleted_at) {
+                        <span class="badge bg-danger">Eliminado</span>
+                        } @else {
+                        <span class="badge bg-success">Activo</span>
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-2" (click)="editPitch(pitch.id)"
+                            [disabled]="pitch.deleted_at">
+                            Editar
+                        </button>
+                        <button class="btn btn-sm btn-danger" (click)="deletePitch(pitch.id)"
+                            [disabled]="pitch.deleted_at">
+                            Eliminar
+                        </button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
     } @else if (!pitches.length && !error) {
     <div class="alert alert-info">
         No hay campos registrados.
@@ -19,5 +55,6 @@
         {{ error }}
     </div>
     }
+    <button class="btn btn-success mt-3" (click)="addPitch()">Añadir Campo</button>
 </div>
 }

@@ -17,6 +17,11 @@ export interface PitchesResponse {
     pitches: Pitch[];
 }
 
+export interface PitchResponse {
+    message: string;
+    pitch: Pitch;
+}
+
 export interface ReservationsResponse {
     message: string;
     reservations: Reservation[];
