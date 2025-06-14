@@ -1,0 +1,63 @@
+<h2>Gestión de Reservas</h2>
+
+<app-loading [isLoading]="isLoading"></app-loading>
+
+@if (!isLoading) {
+<div class="content">
+    @if (reservations.length) {
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Campo</th>
+                    <th>Usuario</th>
+                    <th>Fecha y Hora</th>
+                    <th>Duración</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (reservation of reservations; track reservation.id) {
+                <tr>
+                    <td>{{ reservation.pitch.name }} ({{ reservation.pitch.location }})</td>
+                    <td>{{ reservation.player.name }}</td>
+                    <td>{{ reservation.start_at | date:'medium' }}</td>
+                    <td>{{ reservation.duration }} minutos</td>
+                    <td>
+                        @switch (reservation.status) {
+                        @case ('pending') {
+                        <span class="badge bg-warning">Pendiente</span>
+                        }
+                        @case ('confirmed') {
+                        <span class="badge bg-success">Confirmada</span>
+                        }
+                        @case ('cancelled') {
+                        <span class="badge bg-danger">Cancelada</span>
+                        }
+                        @default {
+                        <span class="badge bg-secondary">Desconocido</span>}
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" (click)="cancelReservation(reservation.id)"
+                            [disabled]="reservation.deleted_at">
+                            Cancelar
+                        </button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    } @else if (!reservations.length && !error) {
+    <div class="alert alert-info">
+        No hay reservas registradas.
+    </div>
+    } @else if (error) {
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    }
+</div>
+}
