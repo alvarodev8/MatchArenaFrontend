@@ -1,0 +1,23 @@
+.table-responsive {
+    margin-bottom: 1rem;
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+}
+
+@media (max-width: 576px) {
+    .table {
+        font-size: 0.9rem;
+    }
+
+    .btn-sm {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
