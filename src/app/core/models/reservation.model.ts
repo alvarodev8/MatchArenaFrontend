@@ -2,7 +2,7 @@ import { Pitch } from './pitch.model';
 
 export interface Reservation {
     id: number;
-    player_id: number,
+    player: { id: number; name: string, email: string };
     start_at: Date,
     duration: number,
     price: number,
@@ -12,4 +12,5 @@ export interface Reservation {
     payment_method: string,
     cancellation_reason: string | null,
     cancellation_date: Date | null,
+    deleted_at?: Date;
 }
