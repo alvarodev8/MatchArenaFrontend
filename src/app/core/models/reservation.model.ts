@@ -8,7 +8,7 @@ export interface Reservation {
     price: number,
     status: string,
     pitch: Pitch;
-    payment_status: string,
+    payment_status: 'pending' | 'completed' | 'failed' | 'refunded',
     payment_method: string,
     cancellation_reason: string | null,
     cancellation_date: Date | null,
