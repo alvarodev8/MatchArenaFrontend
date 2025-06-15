@@ -39,7 +39,7 @@ export class ReservationsComponent implements OnInit {
             const reason = prompt('Motivo de la cancelación:') || 'Sin motivo especificado';
             this.reservationsService.cancelReservation(id, reason).subscribe({
                 next: () => this.loadReservations(),
-                error: (err) => this.error = 'Error al cancelar la reserva: ' + (err.error?.message || err.message),
+                error: (err) => this.error = 'Error al cancelar o reembolsar la reserva: ' + (err.error?.message || err.message),
                 complete: () => { }
             });
         }
