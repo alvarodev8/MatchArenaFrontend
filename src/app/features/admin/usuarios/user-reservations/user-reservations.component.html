@@ -1,0 +1,50 @@
+<h2>Reservas del Jugador</h2>
+
+<app-loading [isLoading]="isLoading"></app-loading>
+
+@if (!isLoading) {
+<div class="content">
+    @if (reservations?.length) {
+    <div class="table-container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Fecha y Hora</th>
+                    <th>Duración</th>
+                    <th>Precio</th>
+                    <th>Estado</th>
+                    <th>Campo</th>
+                    <th>Ubicación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (reservation of reservations; track reservation.id) {
+                <tr>
+                    <td>{{ reservation.start_at | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td>{{ reservation.duration }} minutos</td>
+                    <td>{{ reservation.price }} €</td>
+                    <td>{{ reservation.status }}</td>
+                    <td>{{ reservation.pitch.name }}</td>
+                    <td>{{ reservation.pitch.location }}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" (click)="cancelReservation(reservation.id)"
+                            [disabled]="reservation.status === 'cancelled'">Cancelar</button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    } @else if (!reservations?.length && !error) {
+    <div class="alert alert-info">
+        Este usuario no tiene reservas registradas.
+    </div>
+    } @else if (error) {
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    }
+    <button class="btn btn-secondary" (click)="goBack()">Volver</button>
+</div>
+}

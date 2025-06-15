@@ -8,6 +8,7 @@ export interface User {
     created_at?: string;
     updated_at?: string;
     deleted_at?: string;
+    is_active?: boolean;
 }
 
 export interface LoginCredentials {
@@ -21,4 +22,11 @@ export interface RegisterData {
     password: string;
     password_confirmation: string;
     role: string;
+}
+
+export interface UpdateUserData {
+    name?: string;
+    email?: string;
+    role?: string;
+    is_active?: boolean;
 }

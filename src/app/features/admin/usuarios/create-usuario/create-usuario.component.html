@@ -1,0 +1,41 @@
+<h2>Crear Nuevo Usuario</h2>
+
+<app-loading [isLoading]="isLoading"></app-loading>
+
+@if (!isLoading) {
+<div class="content">
+    <form (ngSubmit)="onSubmit()" class="form-container">
+        <div class="mb-3">
+            <label for="name" class="form-label">Nombre</label>
+            <input type="text" id="name" [(ngModel)]="formData.name" name="name" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" [(ngModel)]="formData.email" name="email" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" id="password" [(ngModel)]="formData.password" name="password" class="form-control"
+                required>
+        </div>
+        <div class="mb-3">
+            <label for="password_confirmation" class="form-label">Confirmar Contraseña</label>
+            <input type="password" id="password_confirmation" [(ngModel)]="formData.password_confirmation"
+                name="password_confirmation" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="role" class="form-label">Rol</label>
+            <select id="role" [(ngModel)]="formData.role" name="role" class="form-control" required>
+                <option value="admin">Administrador</option>
+                <option value="player">Jugador</option>
+                <option value="establishment">Establecimiento</option>
+            </select>
+        </div>
+        @if (error) {
+        <div class="alert alert-danger">{{ error }}</div>
+        }
+        <button type="submit" class="btn btn-primary">Crear</button>
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancelar</button>
+    </form>
+</div>
+}

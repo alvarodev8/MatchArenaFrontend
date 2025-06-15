@@ -1,3 +1,20 @@
 table, tr, th, td {
     border: 1px solid #ccc;
 }
+
+.content {
+    padding: 20px;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.me-2 {
+    margin-right: 0.5rem;
+}
