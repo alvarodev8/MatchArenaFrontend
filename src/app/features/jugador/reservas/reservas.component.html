@@ -1,4 +1,4 @@
-<h2>Reservas</h2>
+<h2>Mis Reservas</h2>
 
 <app-loading [isLoading]="isLoading"></app-loading>
 
@@ -9,14 +9,29 @@
         {{ successMessage }}
     </div>
     }
-    <ul>
+    <div class="reservations-grid">
         @for (reservation of reservations; track reservation.id) {
-        <li>{{ reservation.start_at | date:'medium' }} - {{ reservation.duration }} min - {{ reservation.pitch.name }}
-            ({{
-            reservation.pitch.location }})
-        </li>
+        <div class="reservation-card"
+            [ngClass]="{'confirmed': reservation.status === 'confirmed', 'cancelled': reservation.status === 'cancelled'}">
+            <div class="card-header">
+                <h3>{{ reservation.pitch.name }}</h3>
+                <p class="location">{{ reservation.pitch.location }}</p>
+            </div>
+            <div class="card-body">
+                <p><strong>Fecha y Hora:</strong> {{ reservation.start_at | date:'dd/MM/yyyy HH:mm' }}</p>
+                <p><strong>Duración:</strong> {{ reservation.duration }} minutos</p>
+                <p><strong>Precio:</strong> {{ reservation.price }} €</p>
+                @if (reservation.cancellation_reason) {
+                <p><strong>Motivo Cancelación:</strong> {{ reservation.cancellation_reason }}</p>
+                }
+            </div>
+            <div class="card-actions" *ngIf="isFuture(reservation.start_at) && reservation.status === 'confirmed'">
+                <button class="btn btn-warning" (click)="openModifyModal(reservation)">Modificar</button>
+                <button class="btn btn-danger" (click)="cancelReservation(reservation.id)">Cancelar</button>
+            </div>
+        </div>
         }
-    </ul>
+    </div>
     @if (reservations.length === 0 && !error) {
     <div class="alert alert-info">
         Todavía no tienes ninguna reserva

@@ -4,6 +4,9 @@ import { ReservasService } from './reservas.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingComponent } from '../../../shared/components/loading/loading.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModifyReservationComponent } from './modify-reservation/modify-reservation.component';
+import { format, isAfter } from 'date-fns'; // Eliminamos parseISO
 
 @Component({
   selector: 'app-jugador-reservas',
@@ -20,7 +23,8 @@ export class ReservasComponent implements OnInit {
 
   constructor(
     private reservasService: ReservasService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -42,4 +46,26 @@ export class ReservasComponent implements OnInit {
     });
   }
 
+  isFuture(startAt: Date): boolean {
+    return isAfter(startAt, new Date());
+  }
+
+  openModifyModal(reservation: Reservation): void {
+    const modalRef = this.modalService.open(ModifyReservationComponent);
+    modalRef.componentInstance.reservation = reservation;
+    modalRef.result.then(
+      () => this.loadReservations(),
+      () => { }
+    );
+  }
+
+  cancelReservation(id: number): void {
+    if (confirm('¿Estás seguro de que deseas cancelar esta reserva?')) {
+      this.reservasService.cancelReservation(id).subscribe({
+        next: () => this.loadReservations(),
+        error: (err) => this.error = 'Error al cancelar la reserva: ' + (err.error?.message || err.message),
+        complete: () => { }
+      });
+    }
+  }
 }
