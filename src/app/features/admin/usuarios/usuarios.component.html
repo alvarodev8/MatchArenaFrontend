@@ -12,6 +12,7 @@
                     <th>Nombre</th>
                     <th>Email</th>
                     <th>Rol</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,6 +21,19 @@
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.role }}</td>
+                    <td>
+
+                        @if (user.role === "player") {
+                        <button class="btn btn-info btn-sm" (click)="viewReservations(user.id)">Ver Reservas</button>
+                        }
+
+                        @if (user.deleted_at === null) {
+                        <button class="btn btn-warning btn-sm" (click)="editUser(user.id)"
+                            style="margin-left: 5px;">Editar</button>
+                        <button class="btn btn-danger btn-sm" (click)="deleteUser(user.id)"
+                            style="margin-left: 5px;">Eliminar</button>
+                        }
+                    </td>
                 </tr>
                 }
             </tbody>
@@ -34,5 +48,6 @@
         {{ error }}
     </div>
     }
+    <button class="btn btn-success" (click)="crearUsuario()">Crear Usuario</button>
 </div>
 }
