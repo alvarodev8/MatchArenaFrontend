@@ -14,6 +14,7 @@
     <div class="pitch-card">
       <h3>{{ pitch.name }}</h3>
       <p><strong>Ubicación:</strong> {{ pitch.location }}</p>
+      <p><strong>Precio la hora:</strong> {{pitch.price}}</p>
       <p><strong>Establecimiento:</strong> {{ pitch?.establishment?.name }}</p>
       <div class="actions">
         <a [routerLink]="['/jugador/campo', pitch.id, 'detalles']" class="btn btn-details">Ver Detalles</a>

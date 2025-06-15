@@ -69,6 +69,8 @@ export class PagarComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.amount = reservationData.price_hour * reservationData.duration / 60;
+
     try {
       if (reservationData && reservationData.client_secret) {
 

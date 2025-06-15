@@ -5,6 +5,7 @@ interface ReservationData {
     start_at: string;
     duration: number;
     client_secret?: string;
+    price_hour: number,
 }
 
 @Injectable({
@@ -14,7 +15,7 @@ export class ReservationStateService {
 
     private reservationData: ReservationData | null = null;
 
-    setReservationData(data: { pitch_id: number; start_at: string; duration: number; client_secret?: string }) {
+    setReservationData(data: { pitch_id: number; start_at: string; duration: number; price_hour:number, client_secret?: string }) {
         this.reservationData = data;
     }
 
