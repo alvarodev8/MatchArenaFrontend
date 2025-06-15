@@ -34,6 +34,9 @@
                         }
                         @case ('cancelled') {
                         <span class="badge bg-danger">Cancelada</span>
+                        @if (reservation.payment_status === 'refunded') {
+                        <span class="badge bg-info ms-2">Reembolsada</span>
+                        }
                         }
                         @default {
                         <span class="badge bg-secondary">Desconocido</span>}
