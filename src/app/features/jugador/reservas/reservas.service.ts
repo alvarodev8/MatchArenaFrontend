@@ -42,4 +42,12 @@ export class ReservasService {
   createPaymentIntent(data: { pitch_id: number; start_at: string; duration: number }): Observable<CreatePaymentIntentResponse> {
     return this.http.post<CreatePaymentIntentResponse>(`${this.apiUrl}/create-payment-intent`, data);
   }
+
+  modifyReservation(id: number, data: { start_at: string; duration: number }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${id}/modify`, data);
+  }
+
+  cancelReservation(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
 }
