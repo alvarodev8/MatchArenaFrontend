@@ -180,6 +180,7 @@ export class ReservaFormComponent implements OnInit {
     const paymentIntentData = {
       pitch_id: this.pitch.id,
       start_at: startAt,
+      price_hour: this.pitch.price,
       duration: this.duration
     };
 
@@ -189,6 +190,7 @@ export class ReservaFormComponent implements OnInit {
         this.reservationStateService.setReservationData({
           pitch_id: this.pitch.id,
           start_at: startAt,
+          price_hour: this.pitch.price,
           duration: this.duration,
           client_secret: response.client_secret
         });

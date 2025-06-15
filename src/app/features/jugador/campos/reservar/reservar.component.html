@@ -7,6 +7,7 @@
   @if (pitch) {
   <div>
     <p><strong>Campo:</strong> {{ pitch.name }} - {{ pitch.location }}</p>
+    <p><strong>Precio la hora:</strong> {{pitch.price}}</p>
 
     <!-- Calendario -->
     <app-calendar [pitch]="pitch" [minDate]="minDate" [maxDate]="maxDate"
