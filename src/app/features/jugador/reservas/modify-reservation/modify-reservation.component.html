@@ -1,0 +1,32 @@
+<div class="modal-header">
+    <h4 class="modal-title">Modificar Reserva</h4>
+    <button type="button" class="btn-close" (click)="activeModal.dismiss('Close')"></button>
+</div>
+<div class="modal-body">
+    @if (reservation) {
+    <p>Reserva actual: {{ reservation.start_at | date:'dd/MM/yyyy HH:mm' }} - {{ reservation.duration }} minutos</p>
+    } @else {
+    <p>Cargando reserva...</p>
+    }
+    <form (ngSubmit)="modifyReservation()">
+        <div class="mb-3">
+            <label for="calendar" class="form-label">Nueva Fecha</label>
+            <app-calendar [pitch]="pitch!" [minDate]="minDate" [maxDate]="maxDate"
+                (dateSelected)="onDateSelected($event)"></app-calendar>
+        </div>
+        <div class="mb-3">
+            <label for="time" class="form-label">Nueva Hora</label>
+            <select id="time" [(ngModel)]="selectedTime" name="time" (ngModelChange)="checkAvailability()" required>
+                <option value="" disabled>Selecciona una hora</option>
+                @for (time of availableTimes; track time) {
+                <option [value]="time">{{ time }}</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!isFormValid || isLoading">Confirmar</button>
+        <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss('Close')">Cancelar</button>
+        @if (error) {
+        <div class="alert alert-danger">{{ error }}</div>
+        }
+    </form>
+</div>
